@@ -10,12 +10,12 @@ import ContactPage from '../views/ContactPage.vue'
 
 const routes = [
     { path: '/', name: 'Dashboard', component: Dashboard },
-    { path: '/electronics', name: 'Electronics', component: Electronics },
-    { path: '/newfashions', name: 'NewFashions', component: NewFashions },
-    { path: '/notifications', name: 'Notifications', component: Notifications },
-    { path: '/register', name: 'Register', component: Register },
-    { path: '/favourites', name: 'FavouritesView', component: FavouritesView },
-    { path: '/contact', name: 'ContactPage', component: ContactPage }
+    { path: '/Electronics', name: 'Electronics', component: Electronics },
+    { path: '/Newfashions', name: 'NewFashions', component: NewFashions },
+    { path: '/Notifications', name: 'Notifications', component: Notifications },
+    { path: '/Register', name: 'Register', component: Register },
+    { path: '/FavouritesView', name: 'FavouritesView', component: FavouritesView },
+    { path: '/ContactPage', name: 'ContactPage', component: ContactPage }
 ]
 
 const router = createRouter({
