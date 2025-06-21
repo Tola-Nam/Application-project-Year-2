@@ -141,9 +141,9 @@ const activityFilter = ref('all')
 const sidebarItems = ref([
   { name: 'Dashboard', icon: '📊', route:'/', active: true, notification: false },
   { name: 'Electronics', icon: '📦',route: 'Electronics', active: false, notification: false },
-  { name: 'NewFashions', icon: '💬',route: 'NewFashions', active: false, notification: false },
+  { name: 'Product', icon: '💬',route: 'NewFashions', active: false, notification: false },
   { name: 'Notifications', icon: '📈',route: 'Notifications', active: false, notification: true },
-  { name: 'Register', icon: '📢',route: 'Register', active: false, notification: true },
+  { name: 'Form', icon: '📊',route: 'Register', active: false, notification: true },
   { name: 'FavouritesView', icon: '👥',route: 'FavouritesView', active: false, notification: false },
   { name: 'ContactPage', icon: '📊',route: 'ContactPage', active: false, notification: false }
 ])

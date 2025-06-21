@@ -1,328 +1,428 @@
 <template>
-  <div class="gradient-bg min-h-screen font-inter">
-    <div class="min-h-screen py-8 px-4">
-      <!-- Header -->
-      <div class="max-w-4xl mx-auto text-center mb-12 slide-in">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6 neon-glow animate-pulse-slow">
-          <i class="fas fa-car-side text-white text-2xl"></i>
+  <div class="product-form">
+    <div class="form-container">
+      <h2 class="form-title">Add New Product</h2>
+
+      <form @submit.prevent="submitForm" class="form">
+        <!-- Basic Product Information -->
+        <div class="form-section">
+          <h3 class="section-title">Basic Information</h3>
+          <h3 class=" text-green-400 text-xxl rounded-2xl fw-bold fst-italic" id="alert-message"></h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="productName">Product Name *</label>
+              <input id="productName" v-model="form.productName" type="text" required class="form-input" placeholder="Enter product name"/>
+            </div>
+
+            <div class="form-group">
+              <label for="sku">Brand</label>
+              <input id="sku" v-model="form.brand" type="text" required class="form-input" placeholder="Enter brand name"/>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="category">Category *</label>
+              <select id="category" v-model="form.category" required class="form-select">
+                <option value="">Select category</option>
+                <option value="rods">Fishing Rods</option>
+                <option value="reels">Fishing Reels</option>
+                <option value="lures">Lures & Baits</option>
+                <option value="tackle">Tackle & Accessories</option>
+                <option value="clothing">Fishing Clothing</option>
+                <option value="electronics">Electronics</option>
+                <option value="tools">Tools & Equipment</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="price">Price *</label>
+                <span class="prefix">$</span>
+                <input id="price" v-model="form.price" type="number" step="0.01" min="0" required class="form-input" placeholder="0.00"/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Product Description</label>
+            <textarea id="description" v-model="form.description" class="form-textarea" rows="4" placeholder="Detailed product description..."></textarea>
+          </div>
         </div>
-        <h1 class="font-orbitron text-4xl md:text-5xl font-bold text-white mb-4 tracking-wider">
-          <span class="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            SUPERCAR
-          </span>
-          REGISTRY
-        </h1>
-        <p class="text-gray-300 text-lg max-w-2xl mx-auto">
-          Add your premium automotive masterpiece to our exclusive collection
-        </p>
-      </div>
 
-      <!-- Main Form -->
-      <div class="max-w-4xl mx-auto">
-        <form @submit.prevent="submitForm" class="glass-morphism rounded-3xl p-8 md:p-12 hover-lift slide-in" method="post">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Basic Information -->
-            <div class="space-y-6">
-              <h2 class="font-orbitron text-2xl font-bold text-white mb-6 flex items-center">
-                <i class="fas fa-info-circle mr-3 text-blue-400"></i>
-                Basic Information
-              </h2>
+        <!-- Pricing & Inventory -->
+        <div class="form-section">
+          <h3 class="section-title">Pricing & Inventory</h3>
 
-              <div class="space-y-2">
-                <label class="block text-gray-300 font-medium">Brand</label>
-                <input v-model="form.brand" type="text" placeholder="Ferrari, Lamborghini, McLaren..."
-                       class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white
-                    placeholder-gray-400 focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-              </div>
-
-              <div class="space-y-2">
-                <label class="block text-gray-300 font-medium">Model</label>
-                <input v-model="form.model" type="text"
-                       placeholder="488 GTB, Huracán, 720S..."
-                       class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
-                    focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-              </div>
-
-              <div class="grid grid-cols-2 gap-4">
-                <div class="space-y-2">
-                  <label class="block text-gray-300 font-medium">Year</label>
-                  <input v-model="form.year" type="number" min="1950" max="2025" placeholder="2024"
-                         class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
-                      focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-                </div>
-                <div class="space-y-2">
-                  <label class="block text-gray-300 font-medium">Price ($)</label>
-                  <input v-model="form.price" type="number" min="0" placeholder="500000"
-                         class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
-                      focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-                </div>
-              </div>
-
-              <div class="space-y-2">
-                <label class="block text-gray-300 font-medium">Color</label>
-                <div class="flex gap-3">
-                  <input v-model="form.color" type="color"
-                         class="w-16 h-12 rounded-lg border border-gray-600 bg-gray-800 cursor-pointer">
-                  <input v-model="form.colorName" type="text" placeholder="Rosso Corsa, Verde Mantis..."
-                         class="flex-1 px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
-                      focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-                </div>
-              </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="quantity">Stock Quantity *</label>
+              <input id="quantity" v-model="form.quantity" type="number" min="0" required class="form-input" placeholder="0"/>
             </div>
 
-            <!-- Technical Specifications -->
-            <div class="space-y-6">
-              <h2 class="font-orbitron text-2xl font-bold text-white mb-6 flex items-center">
-                <i class="fas fa-cogs mr-3 text-purple-400"></i>
-                Specifications
-              </h2>
-
-              <div class="space-y-2">
-                <label class="block text-gray-300 font-medium">Engine</label>
-                <input v-model="form.engine" type="text" placeholder="V12 6.5L Twin-Turbo"
-                       class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
-                    focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-              </div>
-
-              <div class="grid grid-cols-2 gap-4">
-                <div class="space-y-2">
-                  <label class="block text-gray-300 font-medium">Horsepower</label>
-                  <input v-model="form.horsepower" type="number" min="0" placeholder="720"
-                         class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
-                       focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-                </div>
-                <div class="space-y-2">
-                  <label class="block text-gray-300 font-medium">Top Speed (mph)</label>
-                  <input v-model="form.topSpeed" type="number" min="0" placeholder="217"
-                         class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
-                       focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-                </div>
-              </div>
-
-              <div class="space-y-2">
-                <label class="block text-gray-300 font-medium">0-60 mph (seconds)</label>
-                <input v-model="form.acceleration" type="number" step="0.1" min="0" placeholder="2.8"
-                       class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
-                    focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-              </div>
-
-              <div class="space-y-2">
-                <label class="block text-gray-300 font-medium">Transmission</label>
-                <select v-model="form.transmission"
-                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white
-                    focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-                  <option value="" disabled>Select transmission</option>
-                  <option value="manual">Manual</option>
-                  <option value="automatic">Automatic</option>
-                  <option value="semi-automatic">Semi-Automatic</option>
-                  <option value="dual-clutch">Dual-Clutch</option>
-                </select>
-              </div>
-
-              <div class="space-y-2">
-                <label class="block text-gray-300 font-medium">Drive Type</label>
-                <select v-model="form.driveType"
-                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white
-                    focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
-                  <option value="" disabled>Select drive type</option>
-                  <option value="rwd">Rear-Wheel Drive</option>
-                  <option value="awd">All-Wheel Drive</option>
-                  <option value="fwd">Front-Wheel Drive</option>
-                </select>
-              </div>
+            <div class="form-group">
+              <label for="length">Length</label>
+                <input id="length" v-model="form.length" type="number" step="0.1" min="0" class="form-input" placeholder="0.0"/>
             </div>
           </div>
-
-          <!-- Description -->
-          <div class="mt-8 space-y-2">
-            <label class="block text-gray-300 font-medium">Description</label>
-            <textarea v-model="form.description" rows="4"
-                      placeholder="Describe the unique features, history, or special characteristics of this supercar..."
-                      class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
-                focus:border-blue-500 focus:outline-none input-glow transition-all duration-300 resize-none">
-            </textarea>
-          </div>
-
-          <!-- Features -->
-          <div class="mt-8">
-            <label class="block text-gray-300 font-medium mb-4">Premium Features</label>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-              <label v-for="feature in availableFeatures" :key="feature" class="flex items-center space-x-3 cursor-pointer">
-                <input v-model="form.features" :value="feature" type="checkbox"
-                       class="w-5 h-5 text-blue-500 bg-gray-800 border-gray-600 rounded focus:ring-blue-500 focus:ring-2">
-                <span class="text-gray-300 text-sm">{{ feature }}</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="mt-12 text-center">
-            <button type="submit" :disabled="isSubmitting"
-                    class="inline-flex items-center px-12 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-orbitron
-                font-bold text-lg rounded-2xl hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300
-                neon-glow disabled:opacity-50 disabled:cursor-not-allowed">
-              <i class="fas fa-rocket mr-3"></i>
-              <span v-if="!isSubmitting">REGISTER SUPERCAR</span>
-              <span v-else>PROCESSING...</span>
-            </button>
-          </div>
-        </form>
-
-        <!-- Success Message -->
-        <div v-if="showSuccess" class="mt-8 glass-morphism rounded-2xl p-6 text-center slide-in">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4 neon-glow">
-            <i class="fas fa-check text-white text-2xl"></i>
-          </div>
-          <h3 class="font-orbitron text-2xl font-bold text-white mb-2">Registration Complete!</h3>
-          <p class="text-gray-300">Your supercar has been successfully added to our exclusive registry.</p>
         </div>
-      </div>
+
+        <!-- Product Specifications -->
+        <div class="form-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="material">Thumbnail</label>
+              <input id="material" @change="handleFileUpload" type="file" class="form-input"/>
+            </div>
+            <div class="form-group">
+              <label for="color">Color</label>
+              <input id="color" v-model="form.color" type="text" class="form-input" placeholder="e.g., Black, Blue, Red"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            Add Product
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue';
 
-// Form data
-const form = reactive({
+const form = ref({
+  productName: '',
   brand: '',
-  model: '',
-  year: '',
+  category: '',
   price: '',
-  color: '#ff0000',
-  colorName: '',
-  engine: '',
-  horsepower: '',
-  topSpeed: '',
-  acceleration: '',
-  transmission: '',
-  driveType: '',
   description: '',
-  features: []
-})
+  quantity: '',
+  length: '',
+  file: null,
+  color: ''
+});
 
-// Available features for selection
-const availableFeatures = ref([
-  'Carbon Fiber Body',
-  'Active Aerodynamics',
-  'Launch Control',
-  'Track Mode',
-  'Premium Sound System',
-  'Racing Seats',
-  'Ceramic Brakes',
-  'Adaptive Suspension',
-  'Custom Paint',
-  'Limited Edition',
-  'Hybrid System',
-  'Turbo/Supercharged'
-])
+const handleFileUpload = (event) => {
+  form.value.file = event.target.files[0];
+};
 
-// Form state
-const isSubmitting = ref(false)
-const showSuccess = ref(false)
-
-// Form submission handler
 const submitForm = async () => {
-  isSubmitting.value = true
+  const formData = new FormData();
+  formData.append('productName', form.value.productName);
+  formData.append('brand', form.value.brand);
+  formData.append('category', form.value.category);
+  formData.append('price', form.value.price);
+  formData.append('description', form.value.description);
+  formData.append('quantity', form.value.quantity);
+  formData.append('length', form.value.length);
+  formData.append('photo', form.value.file);
+  formData.append('color', form.value.color);
 
-  try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
+  const response = await fetch("http://localhost/ApplicationBackend/api/middleware/insert_api.php", {
+    method: 'POST',
+    body: formData
+  });
 
-    // Log form data (replace with actual API call)
-    console.log('Supercar Data:', {
-      ...form,
-      priceFormatted: new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(form.price)
-    })
+  const result = await response.json();
+  console.log(result);
+  // function for get message to url
+  const params = new URLSearchParams(window.location.search);
+  params.set("message","success");
+  const newURL = `${window.location.pathname}?${params}`;
+  history.pushState({},'',newURL);
+  const message = params.get("message");
 
-    // Show success message
-    showSuccess.value = true
-
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      resetForm()
-      showSuccess.value = false
-    }, 3000)
-
-  } catch (error) {
-    console.error('Error submitting form:', error)
-  } finally {
-    isSubmitting.value = false
+  if ( message === "success"){
+    // alert(message);
+    setTimeout(()=>{
+      document.getElementById('alert-message').innerHTML = `product create ${message}`;
+    },3000)
+  }else {
+    setTimeout(()=>{
+      document.getElementById('alert-message').innerHTML = `product create is not ${message}`;
+    },3000)
   }
-}
-
-// Reset form function
-const resetForm = () => {
-  Object.keys(form).forEach(key => {
-    if (Array.isArray(form[key])) {
-      form[key] = []
-    } else if (key === 'color') {
-      form[key] = '#ff0000'
-    } else {
-      form[key] = ''
-    }
-  })
-}
+};
 </script>
 
+
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
-
-.font-orbitron {
-  font-family: 'Orbitron', monospace;
+.product-form {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f6fa;
+  min-height: 100vh;
 }
 
-.font-inter {
-  font-family: 'Inter', sans-serif;
+.form-container {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.gradient-bg {
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 25%, #2d1b69 50%, #1a1a3a 75%, #0f0f23 100%);
+.form-title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
-.glass-morphism {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.form-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e9ecef;
 }
 
-.neon-glow {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(59, 130, 246, 0.1);
+.form-section:last-of-type {
+  border-bottom: none;
 }
 
-.hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.section-title {
+  color: #34495e;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  border-left: 4px solid #27ae60;
+  padding-left: 12px;
 }
 
-.hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-.input-glow:focus {
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.1);
+.form-group {
+  display: flex;
+  flex-direction: column;
 }
 
-.animate-pulse-slow {
-  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.95rem;
 }
 
-.slide-in {
-  animation: slideIn 0.6s ease-out forwards;
+.form-input,
+.form-select,
+.form-textarea {
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #27ae60;
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+.input-with-prefix,
+.input-with-suffix {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.prefix {
+  position: absolute;
+  left: 12px;
+  color: #6c757d;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.suffix {
+  position: absolute;
+  right: 12px;
+  color: #6c757d;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.input-with-prefix input {
+  padding-left: 30px;
+}
+
+.input-with-suffix input {
+  padding-right: 40px;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-input {
+  width: 18px;
+  height: 18px;
+  accent-color: #27ae60;
+}
+
+.checkbox-label {
+  cursor: pointer;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e9ecef;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #27ae60;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #229954;
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #7f8c8d;
+  transform: translateY(-1px);
+}
+
+.btn-draft {
+  background-color: #f39c12;
+  color: white;
+}
+
+.btn-draft:hover {
+  background-color: #e67e22;
+  transform: translateY(-1px);
+}
+
+.form-summary {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.summary-card {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #27ae60;
+}
+
+.stock {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.summary-description {
+  margin-top: 10px;
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .product-form {
+    padding: 10px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .form-container {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .checkbox-group {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 15px;
+  }
+
+  .form-title {
+    font-size: 1.3rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
   }
 }
 </style>

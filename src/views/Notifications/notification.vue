@@ -19,7 +19,7 @@
 
       <!-- Main Form -->
       <div class="max-w-4xl mx-auto">
-        <form @submit.prevent="submitForm" class="glass-morphism rounded-3xl p-8 md:p-12 hover-lift slide-in" method="post">
+        <form @submit.prevent="submitForm" class="glass-morphism rounded-3xl p-8 md:p-12 hover-lift slide-in">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Basic Information -->
             <div class="space-y-6">
@@ -30,14 +30,14 @@
 
               <div class="space-y-2">
                 <label class="block text-gray-300 font-medium">Brand</label>
-                <input v-model="form.brand" type="text" placeholder="Ferrari, Lamborghini, McLaren..." name="brand"
+                <input v-model="form.brand" type="text" placeholder="Ferrari, Lamborghini, McLaren..."
                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white
                     placeholder-gray-400 focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
               </div>
 
               <div class="space-y-2">
                 <label class="block text-gray-300 font-medium">Model</label>
-                <input v-model="form.model" type="text" placeholder="488 GTB, Huracán, 720S..." name="Model"
+                <input v-model="form.model" type="text" placeholder="488 GTB, Huracán, 720S..."
                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
                     focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
               </div>
@@ -45,13 +45,13 @@
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
                   <label class="block text-gray-300 font-medium">Year</label>
-                  <input v-model="form.year" type="number" min="1950" max="2025" placeholder="2024" name="year"
+                  <input v-model="form.year" type="number" min="1950" max="2025" placeholder="2024"
                          class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
                       focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
                 </div>
                 <div class="space-y-2">
                   <label class="block text-gray-300 font-medium">Price ($)</label>
-                  <input v-model="form.price" type="number" min="0" placeholder="500000" name="price"
+                  <input v-model="form.price" type="number" min="0" placeholder="500000"
                          class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
                       focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
                 </div>
@@ -60,15 +60,8 @@
               <div class="space-y-2">
                 <label class="block text-gray-300 font-medium text-xs">Thumbnail</label>
                 <div class="flex gap-3 items-center">
-                  <!-- Styled File Input Wrapper -->
-                  <label class="flex items-center justify-center w-20 h-[48px] rounded-xl border border-gray-600
-                      bg-gray-800 cursor-pointer hover:bg-gray-700 transition">
-                    <input type="file" class="hidden" name="thumbnail"/>
-                    <span class="text-sm text-gray-300">Choose</span>
-                  </label>
-
                   <!-- Text Input -->
-                  <input v-model="form.colorName" type="text" placeholder="Rosso Corsa, Verde Mantis..." name="color"
+                  <input type="file" placeholder="Rosso Corsa, Verde Mantis..."
                       class="flex-1 px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
                     focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required/>
                 </div>
@@ -84,7 +77,7 @@
 
               <div class="space-y-2">
                 <label class="block text-gray-300 font-medium">Engine</label>
-                <input v-model="form.engine" type="text" placeholder="V12 6.5L Twin-Turbo" name="engine"
+                <input v-model="form.engine" type="text" placeholder="V12 6.5L Twin-Turbo"
                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
                     focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
               </div>
@@ -92,13 +85,13 @@
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
                   <label class="block text-gray-300 font-medium">Horsepower</label>
-                  <input v-model="form.horsepower" type="number" min="0" placeholder="720" name="HorsePower"
+                  <input v-model="form.horsepower" type="number" min="0" placeholder="720"
                          class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
                        focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
                 </div>
                 <div class="space-y-2">
                   <label class="block text-gray-300 font-medium text-xs">Top Speed (mph)</label>
-                  <input v-model="form.topSpeed" type="number" min="0" placeholder="217" name="TopSpeed"
+                  <input v-model="form.topSpeed" type="number" min="0" placeholder="217"
                          class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
                        focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
                 </div>
@@ -106,7 +99,7 @@
 
               <div class="space-y-2">
                 <label class="block text-gray-300 font-medium">0-60 mph (seconds)</label>
-                <input v-model="form.acceleration" type="number" step="0.1" min="0" placeholder="2.8" name="seconds"
+                <input v-model="form.acceleration" type="number" step="0.1" min="0" placeholder="2.8"
                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
                     focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
               </div>
@@ -114,7 +107,7 @@
               <div class="space-y-2">
                 <label class="block text-gray-300 font-medium">Transmission</label>
                 <select v-model="form.transmission" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white
-                    focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" name="transmission" required>
+                    focus:border-blue-500 focus:outline-none input-glow transition-all duration-300" required>
                   <option value="" disabled>Select transmission</option>
                   <option value="manual">Manual</option>
                   <option value="automatic">Automatic</option>
@@ -141,8 +134,8 @@
           <div class="mt-8 space-y-2">
             <label class="block text-gray-300 font-medium">Description</label>
             <textarea v-model="form.description" rows="4" name="description"
-                      placeholder="Describe the unique features, history, or special characteristics of this supercar..."
-                      class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
+                placeholder="Describe the unique features, history, or special characteristics of this supercar..."
+                class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400
                 focus:border-blue-500 focus:outline-none input-glow transition-all duration-300 resize-none">
             </textarea>
           </div>
@@ -153,7 +146,7 @@
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
               <label v-for="feature in availableFeatures" :key="feature" class="flex items-center space-x-3 cursor-pointer">
                 <input v-model="form.features" :value="feature" type="checkbox" name="PremiumFeatures"
-                       class="w-5 h-5 text-blue-500 bg-gray-800 border-gray-600 rounded focus:ring-blue-500 focus:ring-2">
+                  class="w-5 h-5 text-blue-500 bg-gray-800 border-gray-600 rounded focus:ring-blue-500 focus:ring-2">
                 <span class="text-gray-300 text-sm">{{ feature }}</span>
               </label>
             </div>
@@ -162,7 +155,7 @@
           <!-- Submit Button -->
           <div class="mt-12 text-center">
             <button type="submit" :disabled="isSubmitting"
-                    class="inline-flex items-center px-12 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-orbitron
+                class="inline-flex items-center px-12 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-orbitron
                 font-bold text-lg rounded-2xl hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300
                 neon-glow disabled:opacity-50 disabled:cursor-not-allowed">
               <i class="fas fa-rocket mr-3"></i>
@@ -187,14 +180,15 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import axios from 'axios'
 
-// Form data
+// Form state
 const form = reactive({
   brand: '',
   model: '',
   year: '',
   price: '',
-  color: '#ff0000',
+  thumbnail: null, // for file input
   colorName: '',
   engine: '',
   horsepower: '',
@@ -206,7 +200,10 @@ const form = reactive({
   features: []
 })
 
-// Available features for selection
+const showSuccess = ref(false)
+const isSubmitting = ref(false)
+
+// Available features
 const availableFeatures = ref([
   'Carbon Fiber Body',
   'Active Aerodynamics',
@@ -222,56 +219,50 @@ const availableFeatures = ref([
   'Turbo/Supercharged'
 ])
 
-// Form state
-const isSubmitting = ref(false)
-const showSuccess = ref(false)
+// Handle file input separately
+function handleThumbnailUpload(event) {
+  form.thumbnail = event.target.files[0]
+}
 
-// Form submission handler
-const submitForm = async () => {
+// Submit the form
+async function submitForm() {
   isSubmitting.value = true
+  const formData = new FormData()
+
+  for (const key in form) {
+    if (key === 'features') {
+      form.features.forEach(feature => formData.append('features[]', feature))
+    } else {
+      formData.append(key, form[key])
+    }
+  }
 
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    const response = await axios.post(
+        'http://localhost/ApplicationBackend/api/middleware/insert_api.php',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+    )
 
-    // Log form data (replace with actual API call)
-    console.log('Supercar Data:', {
-      ...form,
-      priceFormatted: new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(form.price)
-    })
-
-    // Show success message
-    showSuccess.value = true
-
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      resetForm()
-      showSuccess.value = false
-    }, 3000)
-
+    if (response.data.success) {
+      showSuccess.value = true
+    } else {
+      console.error(response.data)
+      alert('Something went wrong while submitting the form.')
+    }
   } catch (error) {
-    console.error('Error submitting form:', error)
+    console.error('Submit error:', error)
+    alert('Failed to submit. Check console for error details.')
   } finally {
     isSubmitting.value = false
   }
 }
-
-// Reset form function
-const resetForm = () => {
-  Object.keys(form).forEach(key => {
-    if (Array.isArray(form[key])) {
-      form[key] = []
-    } else if (key === 'color') {
-      form[key] = '#ff0000'
-    } else {
-      form[key] = ''
-    }
-  })
-}
 </script>
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
