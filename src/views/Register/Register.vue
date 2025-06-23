@@ -23,15 +23,17 @@
           <div class="form-row">
             <div class="form-group">
               <label for="category">Category *</label>
-              <select id="category" v-model="form.category" required class="form-select">
-                <option value="">Select category</option>
-                <option value="rods">Fishing Rods</option>
-                <option value="reels">Fishing Reels</option>
-                <option value="lures">Lures & Baits</option>
-                <option value="tackle">Tackle & Accessories</option>
-                <option value="clothing">Fishing Clothing</option>
-                <option value="electronics">Electronics</option>
-                <option value="tools">Tools & Equipment</option>
+              <select  id="category" v-model="form.category" required class="form-select text-grey-400 text-xl fw-bold fst-italic">
+                <option value="Select category" disabled class="text-green-500">Select category</option>
+                <option value="FishingClothing">FishingClothing</option>
+                <option value="FishingChairs">FishingChairs</option>
+                <option value="FishingWadersBoots">FishingWaders&Boots</option>
+                <option value="FishingLine">FlyFishingLine</option>
+                <option value="FishingReel">FishingReel</option>
+                <option value="FishingLures">FishingLures</option>
+                <option value="FishingBundles">FishingBundles</option>
+                <option value="FishingTools">FishingTools</option>
+                <option value="FishingPolesWhips">PolesWhips</option>
               </select>
             </div>
             <div class="form-group">
@@ -73,7 +75,7 @@
             </div>
             <div class="form-group">
               <label for="color">Color</label>
-              <input id="color" v-model="form.color" type="text" class="form-input" placeholder="e.g., Black, Blue, Red"/>
+              <input id="color" v-model="form.color" type="text" class="form-input" placeholder="Black, Blue, Red"/>
             </div>
           </div>
         </div>

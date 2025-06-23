@@ -36,12 +36,10 @@
       <!-- Navigation -->
       <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
         <div>
-          <router-link v-for="item in sidebarItems" :key="item.name" :to="item.route === '/' ? '/' : { name: item.route }"
+          <router-link :class="[isDarkMode ? 'border-gray-700' : 'border-gray-200']" v-for="item in sidebarItems" :key="item.name" :to="item.route === '/' ? '/' : { name: item.route }"
               class="block">
-            <div @click="setActiveMenuItem(item.name)"
-                :class="['flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200',item.active
-            ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
-            : isDarkMode
+            <div @click="setActiveMenuItem(item.name)" :class="['flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200',item.active
+              ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg': isDarkMode
               ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
               : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' ]">
               <div class="flex items-center space-x-3">
@@ -66,13 +64,13 @@
           <span class="text-lg">❓</span>
           <span>Help Center</span>
         </div>
-        <div class="flex items-center justify-between p-3">
-          <span :class="isDarkMode ? 'text-gray-300' : 'text-gray-600'">Dark Mode</span>
-          <button @click="toggleDarkMode" :class="['w-12 h-6 rounded-full relative transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500',
-              isDarkMode ? 'bg-purple-600' : 'bg-gray-300']">
-            <div :class="['w-5 h-5 bg-white rounded-full absolute top-0.5 transition-all duration-300 shadow-md',isDarkMode ? 'right-0.5' : 'left-0.5']"></div>
-          </button>
-        </div>
+<!--        <div class="flex items-center justify-between p-3">-->
+<!--          <span :class="isDarkMode ? 'text-gray-300' : 'text-gray-600'">Dark Mode</span>-->
+<!--          <button @click="toggleDarkMode" :class="['w-12 h-6 rounded-full relative transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500',-->
+<!--              isDarkMode ? 'bg-purple-600' : 'bg-gray-300']">-->
+<!--            <div :class="['w-5 h-5 bg-white rounded-full absolute top-0.5 transition-all duration-300 shadow-md',isDarkMode ? 'right-0.5' : 'left-0.5']"></div>-->
+<!--          </button>-->
+<!--        </div>-->
       </div>
     </div>
 
@@ -96,29 +94,32 @@
 
           <div class="flex items-center space-x-2 md:space-x-4">
             <div class="flex items-center space-x-2 md:space-x-3">
-              <button :class="['p-2 rounded-lg transition-colors relative',
-                isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200']">
-                <span class="text-lg">🔔</span>
-                <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-              </button>
+              <div class="relative" @click="toggleDropdown">
+                <!-- User Info -->
+                <div class="flex items-center space-x-2 cursor-pointer">
+                  <div class="w-8 h-8 bg-gradient-to-r from-orange-400 to-pink-500 rounded-full flex items-center justify-center">
+                    <span class="text-white text-sm font-bold">M</span>
+                  </div>
+                  <div class="hidden md:block">
+                    <div class="text-sm font-medium">Application Project G7</div>
+                    <div :class="['text-xs', isDarkMode ? 'text-gray-400' : 'text-gray-600']">Admin Store</div>
+                  </div>
+                </div>
 
-              <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-gradient-to-r from-orange-400 to-pink-500 rounded-full flex items-center justify-center">
-                  <span class="text-white text-sm font-bold">M</span>
+                <!-- Dropdown -->
+                <div v-if="showDropdown" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10 overflow-hidden">
+                  <router-link to="/ContactPage" type="button" href="#" class="block px-4 py-2 text-sm fw-bold fst-italic text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-400">
+                    <i class="bi bi-card-checklist me-2"></i>Chance Profile</router-link>
+                  <a type="button" href="#" class="block px-4 py-2 text-sm fw-bold fst-italic text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-400">
+                    <i class="bi bi-lock me-2"></i>Lock Account</a>
+                  <a type="button" href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-400 dark:hover:bg-red-100 dark:text-red-100">
+                    <i class="bi bi-box-arrow-right me-2"></i>Logout</a>
                 </div>
-                <div class="hidden md:block">
-                  <div class="text-sm font-medium">Application Project G7</div>
-                  <div :class="['text-xs',isDarkMode ? 'text-gray-400' : 'text-gray-600']">Admin Store</div>
-                </div>
-                <button :class="['text-lg hover:bg-gray-700 rounded p-1 transition-colors',
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600']">⋯
-                </button>
               </div>
             </div>
           </div>
         </div>
       </header>
-
       <!-- Content -->
       <main class="flex-1 p-4 md:p-6 overflow-auto">
         <router-view />
@@ -223,6 +224,13 @@ onMounted(() => {
     window.removeEventListener('resize', handleResize)
   }
 })
+
+const showDropdown = ref(false)// you can bind this to your actual dark mode logic
+
+function toggleDropdown() {
+  showDropdown.value = !showDropdown.value
+}
+
 </script>
 <style scoped>
 /* Hide scrollbar for Chrome, Safari and Opera */
