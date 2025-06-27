@@ -7,7 +7,6 @@ import Notifications from '../views/Notifications/notification.vue'
 import Register from '../views/Register/Register.vue'
 import FavouritesView from '../views/FavouritesView.vue'
 import ContactPage from '../views/ContactPage.vue'
-import detail from '../views/NewFashions/detail.vue'
 import Detail from "../views/NewFashions/detail.vue";
 const routes = [
     { path: '/', name: 'Dashboard', component: Dashboard },

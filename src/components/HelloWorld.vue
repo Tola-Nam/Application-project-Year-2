@@ -27,9 +27,16 @@
       <div :class="['p-4 border-b',isDarkMode ? 'border-gray-700' : 'border-gray-200']">
         <select :class="['w-full p-2 rounded-lg border transition-colors',isDarkMode
             ? 'bg-gray-700 text-white border-gray-600': 'bg-white text-gray-900 border-gray-300']">
-          <option>Banana Store</option>
-          <option>Apple Store</option>
-          <option>Orange Store</option>
+          <option>Please check category</option>
+          <option>Fishing Clothing</option>
+          <option>Fishing Chairs</option>
+          <option>Fishing Waders & Boots</option>
+          <option>Fly Fishing Line</option>
+          <option>Fishing Reel</option>
+          <option>Fishing Lures</option>
+          <option>FishingBundles</option>
+          <option>Fishing Tools</option>
+          <option>Fishing Poles Whips</option>
         </select>
       </div>
 
@@ -81,7 +88,7 @@
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-4">
             <!-- Mobile menu button -->
-            <button @click="toggleMobileMenu" class="lg:hidden p-2 rounded-md hover:bg-gray-700">
+            <button @click="toggleMobileMenu" class="lg:hidden p-2 rounded-md ">
               <span class="text-xl">☰</span>
             </button>
             <div>
@@ -107,12 +114,12 @@
                 </div>
 
                 <!-- Dropdown -->
-                <div v-if="showDropdown" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10 overflow-hidden">
-                  <router-link to="/ContactPage" type="button" href="#" class="block px-4 py-2 text-sm fw-bold fst-italic text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-400">
+                <div v-if="showDropdown" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10 overflow-hidden me-2">
+                  <router-link to="/ContactPage" type="button" class="block px-4 py-2 text-sm fw-bold fst-italic text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-400">
                     <i class="bi bi-card-checklist me-2"></i>Chance Profile</router-link>
-                  <a type="button" href="#" class="block px-4 py-2 text-sm fw-bold fst-italic text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-400">
+                  <a type="button" href="#" class="block px-4 py-2 text-sm fw-bold fst-italic text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-400">
                     <i class="bi bi-lock me-2"></i>Lock Account</a>
-                  <a type="button" href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-400 dark:hover:bg-red-100 dark:text-red-100">
+                  <a type="button" href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-400 dark:hover:bg-red-100 dark:text-red-300">
                     <i class="bi bi-box-arrow-right me-2"></i>Logout</a>
                 </div>
               </div>

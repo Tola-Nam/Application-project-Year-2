@@ -290,9 +290,9 @@ const recentActivity = ref([
 ])
 
 const chartData = ref({
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-  profit: [8000, 12000, 6000, 9000, 15000, 13000],
-  loss: [6000, 8000, 10000, 7000, 12000, 9000]
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  profit: [8000, 12000, 6000, 9000, 15000, 13000,8000, 12000, 6000, 9000, 15000, 13000],
+  loss: [6000, 8000, 10000, 7000, 12000, 9000,8000, 12000, 6000, 9000, 15000, 13000]
 })
 
 const trafficData = ref([

@@ -1,388 +1,310 @@
 <template>
-  <div :class="['flex h-screen transition-colors duration-300',isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900']">
-
-      <!-- Content -->
-      <main class="flex-1 p-4 md:p-6 overflow-auto">
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
-          <div v-for="stat in stats" :key="stat.title" :class="['p-4 md:p-6 rounded-xl border transition-all duration-200 hover:shadow-lg cursor-pointer',
-              isDarkMode ? 'bg-gray-800 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 hover:border-gray-300']"
-              @click="viewReport(stat.title)">
-            <div class="flex items-center justify-between mb-4">
-              <h3 :class="['text-sm font-medium',
-                isDarkMode ? 'text-gray-400' : 'text-gray-600']">{{ stat.title }}</h3>
-              <button :class="['hover:text-white transition-colors',
-                isDarkMode ? 'text-gray-400' : 'text-gray-600']">⋯</button>
+  <div class="min-h-screen p-1">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div v-for="item in items" :key="item.category"
+             class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+          <!-- Clickable router-link wrapper -->
+          <router-link :to="{ path: 'detail', query: { category: item.category } }" class="block">
+            <!-- Header -->
+            <div class="flex justify-between items-center p-4 pb-2">
+              <h3 class="text-gray-800 font-semibold text-sm truncate">
+                {{ item.productName }}
+              </h3>
             </div>
-            <div class="mb-4">
-              <div class="text-xl md:text-2xl font-bold mb-2">{{ stat.value }}</div>
-              <div class="flex items-center space-x-2">
-                <span :class="['text-sm font-medium',
-                  stat.positive ? 'text-green-400' : 'text-red-400']">
-                  {{ stat.change }}
-                </span>
-                <span :class="['text-sm',isDarkMode ? 'text-gray-400' : 'text-gray-600']">{{ stat.changeValue }}</span>
+
+            <!-- Image -->
+            <div class="px-4 pb-4">
+              <div class="bg-gray-100 rounded-lg h-80 flex items-center justify-center overflow-hidden">
+                <img :src="`http://localhost/ApplicationBackend/api/${item.thumbnail}`" :alt="item.productName" class="w-full h-full object-cover"/>
               </div>
             </div>
-            <button :class="['text-sm flex items-center space-x-1 transition-colors hover:text-purple-400',
-              isDarkMode ? 'text-gray-400' : 'text-gray-600']">
-              <span>View Report</span>
-              <span>→</span>
+            <!-- Details -->
+            <div class="px-4">
+              <div class="flex items-center justify-between mb-3 text-gray-500 text-xxl">
+                <div class="flex items-center space-x-1 max-w-[120px]">
+                  <span class="text-blue-500">📔</span>
+                  <span class="text-base text-gray-500 truncate overflow-hidden whitespace-nowrap">{{ item.description }}</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                  <span class="text-blue-500">⚙️</span>
+                  <span class="text-base">{{ item.color }}</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between text-gray-600 text-xs">
+                <div class="mb-2">
+                  <div class="flex items-center space-x-1">
+                    <span class="text-yellow-500 text-base">⭐</span>
+                    <span class="text-yellow-500 font-mono text-base">{{ item.length }}</span>
+                  </div>
+                  <div class="flex items-center space-x-1">
+                    <span class="text-green-500 text-base">👥</span>
+                    <span class="text-green-500 font-mono text-base">{{ item.stock }}</span>
+                  </div>
+                </div>
+                <div class="text-red-500 font-mono text-lg ml-auto">
+                  ${{ item.price }}
+                </div>
+              </div>
+            </div>
+          </router-link>
+
+          <!-- Buttons OUTSIDE router-link -->
+          <div class="flex justify-between px-4 pb-4">
+            <button @click="toggleFavorite(item.pro_id)" class="text-gray-400 hover:text-red-500 transition-colors">
+              <svg class="w-5 h-5" :class="item.isFavorite ? 'text-red-500 fill-current' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+              </svg>
+            </button>
+            <div class="flex space-x-2 mt-4">
+              <!-- Edit Button -->
+              <button @click="openModal(item.pro_id)" class="flex items-center px-4 py-2 bg-green-400 hover:bg-green-600 text-white text-sm font-medium rounded-lg shadow transition">
+                <i class="bi bi-pencil-square me-2"></i>Edit
+              </button>
+
+              <!-- Delete Button -->
+              <button class="flex items-center px-4 py-2 bg-red-400 hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow transition">
+                <i class="bi bi-trash me-2"></i>Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  modal for update product -->
+  <div class="p-6">
+    <!-- Modal -->
+    <div v-if="showModal" class="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50" @click.self="showModal = false">
+      <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative space-y-6">
+        <!-- Close Button -->
+        <button @click="showModal = false"
+                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold">
+          &times;
+        </button>
+
+        <!-- Modal Header -->
+        <h2 class="text-2xl font-semibold text-gray-800">Update Product</h2>
+
+        <!-- Alert Message -->
+        <h3 id="alert-message" class="text-green-500 font-semibold italic text-lg"></h3>
+
+        <!-- Form -->
+        <form @submit.prevent="updateItem()" class="space-y-6">
+          <!-- Basic Info -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-2">Basic Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Product Name *</label>
+                <input v-model="form.productName" type="text" required placeholder="Enter product name"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Brand</label>
+                <input v-model="form.brand" type="text" required placeholder="Enter brand name"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Category *</label>
+                <select v-model="form.category" required
+                        class="w-full border border-gray-300 rounded px-3 py-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-400">
+                  <option disabled value="">Select category</option>
+                  <option value="FishingClothing">FishingClothing</option>
+                  <option value="FishingChairs">FishingChairs</option>
+                  <option value="FishingWadersBoots">FishingWaders & Boots</option>
+                  <option value="FishingLine">FlyFishingLine</option>
+                  <option value="FishingReel">FishingReel</option>
+                  <option value="FishingLures">FishingLures</option>
+                  <option value="FishingBundles">FishingBundles</option>
+                  <option value="FishingTools">FishingTools</option>
+                  <option value="FishingPolesWhips">PolesWhips</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Price *</label>
+                <input v-model="form.price" type="number" step="0.01" min="0" required placeholder="0.00"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
+                <input v-model="form.pro_id" type="text" required value="${{item.pro_id}}"
+                       class=" w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+            </div>
+            <div class="mt-4">
+              <label class="block text-sm font-medium text-gray-600 mb-1">Description</label>
+              <textarea v-model="form.description" rows="4" placeholder="Detailed product description..."
+                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"></textarea>
+            </div>
+          </div>
+
+          <!-- Stock and Length -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-2">Pricing & Inventory</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Stock *</label>
+                <input v-model="form.stock" type="number" min="0" required placeholder="0"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Length</label>
+                <input v-model="form.length" type="number" step="0.1" min="0" placeholder="0.0"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Thumbnail & Color -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-2">Product Specs</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Thumbnail</label>
+                <input type="file" @change="handleFileUpload"
+                       class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Color</label>
+                <input v-model="form.color" type="text" placeholder="Black, Blue, Red"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Buttons -->
+          <div class="flex justify-end space-x-3 pt-4">
+            <button type="button" @click="showModal = false"
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded">
+              Cancel
+            </button>
+            <button type="submit"
+                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded shadow">
+              Submit
             </button>
           </div>
-        </div>
-
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6">
-          <!-- Revenue Chart -->
-          <div :class="['xl:col-span-2 p-4 md:p-6 rounded-xl border',
-            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200']">
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 space-y-4 md:space-y-0">
-              <div>
-                <h3 class="text-lg font-semibold mb-1">Revenue</h3>
-                <div class="flex items-center space-x-4">
-                  <span class="text-2xl font-bold">${{ selectedRevenue.toLocaleString() }}</span>
-                  <span class="text-green-400 text-sm">↗ +10%</span>
-                </div>
-              </div>
-              <select v-model="selectedPeriod" @change="updateRevenue"
-                  :class="['p-2 rounded-lg border transition-colors',
-                  isDarkMode
-                    ? 'bg-gray-700 text-white border-gray-600'
-                    : 'bg-white text-gray-900 border-gray-300']">
-                <option value="month">Month</option>
-                <option value="week">Week</option>
-                <option value="year">Year</option>
-              </select>
-            </div>
-
-            <div class="flex items-center space-x-6 mb-6">
-              <div class="flex items-center space-x-2">
-                <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
-                <span :class="['text-sm',
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                ]">Profit</span>
-              </div>
-              <div class="flex items-center space-x-2">
-                <div class="w-3 h-3 bg-purple-300 rounded-full"></div>
-                <span :class="['text-sm',
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                ]">Loss</span>
-              </div>
-            </div>
-
-            <!-- Interactive Chart -->
-            <div class="h-48 md:h-64 flex items-end space-x-1 md:space-x-2">
-              <div v-for="(value, index) in chartData.profit" :key="index" class="flex flex-col items-center space-y-1 flex-1 group cursor-pointer"
-                  @mouseenter="hoveredBar = index" @mouseleave="hoveredBar = -1">
-                <div class="flex space-x-1 w-full relative">
-                  <div class="bg-purple-500 rounded-sm flex-1 transition-all duration-300 hover:bg-purple-400"
-                      :class="{ 'transform scale-105': hoveredBar === index }" :style="{ height: (value / 20000 * 160) + 'px' }">
-                    <!-- Tooltip -->
-                    <div v-if="hoveredBar === index"
-                        class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs whitespace-nowrap z-10">
-                      Profit: ${{ value.toLocaleString() }}
-                    </div>
-                  </div>
-                  <div class="bg-purple-300 rounded-sm flex-1 transition-all duration-300 hover:bg-purple-200"
-                      :class="{ 'transform scale-105': hoveredBar === index }"
-                      :style="{ height: (chartData.loss[index] / 20000 * 160) + 'px' }">
-                    <!-- Tooltip -->
-                    <div v-if="hoveredBar === index"
-                        class="absolute -top-8 right-0 bg-gray-900 text-white px-2 py-1 rounded text-xs whitespace-nowrap z-10">
-                      Loss: ${{ chartData.loss[index].toLocaleString() }}
-                    </div>
-                  </div>
-                </div>
-                <span :class="['text-xs transition-colors',
-                  hoveredBar === index
-                    ? 'text-purple-500 font-medium'
-                    : isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                ]">{{ chartData.labels[index] }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Traffic Channel -->
-          <div :class="['p-4 md:p-6 rounded-xl border',
-            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200']">
-            <div class="flex items-center justify-between mb-6">
-              <h3 class="text-lg font-semibold">Traffic Channel</h3>
-              <select :class="['p-2 rounded-lg border text-sm transition-colors',isDarkMode
-                  ? 'bg-gray-700 text-white border-gray-600'
-                  : 'bg-white text-gray-900 border-gray-300']">
-                <option>All time</option>
-                <option>Last 30 days</option>
-                <option>Last 7 days</option>
-              </select>
-            </div>
-
-            <div class="flex items-center justify-center mb-6">
-              <div class="relative w-32 h-32">
-                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="35" fill="none" :stroke="isDarkMode ? '#374151' : '#E5E7EB'" stroke-width="8"/>
-                  <circle cx="50" cy="50" r="35" fill="none" stroke="#8B5CF6" stroke-width="8"
-                      stroke-dasharray="110 220" stroke-linecap="round" class="animate-pulse"/>
-                  <circle cx="50" cy="50" r="35" fill="none" stroke="#A78BFA" stroke-width="8"
-                      stroke-dasharray="42 220" stroke-linecap="round" transform="rotate(158 50 50)"/>
-                  <circle cx="50" cy="50" r="35" fill="none" stroke="#9CA3AF" stroke-width="8"
-                      stroke-dasharray="68 220" stroke-linecap="round" transform="rotate(228 50 50)"/>
-                </svg>
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <span class="text-xl font-bold">50.5%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-3">
-              <div v-for="item in trafficData" :key="item.label"
-                  class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-700 transition-colors cursor-pointer">
-                <div class="flex items-center space-x-2">
-                  <div :class="['w-3 h-3 rounded-full', item.color]"></div>
-                  <span :class="isDarkMode ? 'text-gray-400' : 'text-gray-600'">{{ item.label }}</span>
-                </div>
-                <span class="font-medium">{{ item.value }}%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Recent Activity -->
-        <div :class="['mt-6 md:mt-8 rounded-xl border overflow-hidden',
-          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200']">
-          <div :class="['p-4 md:p-6 border-b flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0',
-            isDarkMode ? 'border-gray-700' : 'border-gray-200']">
-            <h3 class="text-lg font-semibold">Recent Activity</h3>
-            <div class="flex items-center space-x-2">
-              <select v-model="activityFilter" @change="filterActivity"
-                  :class="['p-2 rounded-lg border text-sm transition-colors',
-                  isDarkMode
-                    ? 'bg-gray-700 text-white border-gray-600'
-                    : 'bg-white text-gray-900 border-gray-300']">
-                <option value="all">All Activities</option>
-                <option value="24h">Last 24h</option>
-                <option value="week">This Week</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead :class="isDarkMode ? 'bg-gray-700' : 'bg-gray-50'">
-              <tr>
-                <th class="text-left p-3 md:p-4 font-medium text-sm">Customer</th>
-                <th class="text-left p-3 md:p-4 font-medium text-sm">Status</th>
-                <th class="text-left p-3 md:p-4 font-medium text-sm hidden md:table-cell">Customer ID</th>
-                <th class="text-left p-3 md:p-4 font-medium text-sm">Time</th>
-                <th class="text-left p-3 md:p-4 font-medium text-sm">Amount</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="activity in filteredActivity" :key="activity.customerId"
-                  :class="['border-b transition-colors hover:cursor-pointer',
-                    isDarkMode
-                      ? 'border-gray-700 hover:bg-gray-700'
-                      : 'border-gray-200 hover:bg-gray-50']" @click="viewCustomer(activity)">
-                <td class="p-3 md:p-4">
-                  <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span class="text-white text-sm font-medium">{{ activity.name.charAt(0) }}</span>
-                    </div>
-                    <div class="min-w-0">
-                      <div class="font-medium truncate">{{ activity.name }}</div>
-                      <div :class="['text-sm truncate',
-                          isDarkMode ? 'text-gray-400' : 'text-gray-600']">{{ activity.email }}</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="p-3 md:p-4">
-                    <span :class="['px-2 py-1 rounded-full text-xs font-medium',
-                        getStatusColor(activity.status) ]">{{ activity.status }}
-                    </span>
-                </td>
-                <td :class="['p-3 md:p-4 hidden md:table-cell font-mono text-sm',
-                    isDarkMode ? 'text-gray-300' : 'text-gray-700']">{{ activity.customerId }}</td>
-                <td :class="['p-3 md:p-4 text-sm',
-                    isDarkMode ? 'text-gray-400' : 'text-gray-600']">{{ activity.time }}</td>
-                <td class="p-3 md:p-4 font-semibold">{{ activity.amount }}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </main>
+        </form>
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from "vue"
+import Swal from 'sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css'
 
-// Reactive state
-const isDarkMode = ref(true)
-const isMobileMenuOpen = ref(false)
-const hoveredBar = ref(-1)
-const selectedPeriod = ref('month')
-const selectedRevenue = ref(16400)
-const activityFilter = ref('all')
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';   // optional
+import Row from 'primevue/row';                   // optional
 
-const stats = ref([
-  {
-    title: 'Total Sales',
-    value: '$120,784.02',
-    change: '+12.3%',
-    changeValue: '+$1,453.89 today',
-    positive: true
-  },
-  {
-    title: 'Total Orders',
-    value: '28,834',
-    change: '+20.1%',
-    changeValue: '+2,676 today',
-    positive: true
-  },
-  {
-    title: 'Visitor',
-    value: '18,896',
-    change: '-5.6%',
-    changeValue: '-876 today',
-    positive: false
-  },
-  {
-    title: 'Refunded',
-    value: '2,876',
-    change: '+1.3%',
-    changeValue: '+34 today',
-    positive: true
-  }
-])
+const items = ref([])
 
-const recentActivity = ref([
-  {
-    name: 'Ronald Richards',
-    email: 'ronrichards@mail.com',
-    status: 'Member',
-    customerId: '#74568320',
-    time: '8 min ago',
-    amount: '$12,408.20'
-  },
-  {
-    name: 'Darrell Steward',
-    email: 'steward.darrel@gmail.com',
-    status: 'Signed Up',
-    customerId: '#23134855',
-    time: '10 min ago',
-    amount: '$201.50'
-  },
-  {
-    name: 'Marvin McKinney',
-    email: 'mckinney.m@mail.com',
-    status: 'New Customer',
-    customerId: '#54394837',
-    time: '15 min ago',
-    amount: '$2,856.03'
-  },
-  {
-    name: 'Jenny Wilson',
-    email: 'jenny.wilson@mail.com',
-    status: 'Member',
-    customerId: '#12345678',
-    time: '1 hour ago',
-    amount: '$456.78'
-  }
-])
+onMounted(async () => {
+  try {
+    const res = await fetch('http://localhost/ApplicationBackend/api/middleware/api_fecth.php')
+    const json = await res.json()
 
-const chartData = ref({
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-  profit: [8000, 12000, 6000, 9000, 15000, 13000],
-  loss: [6000, 8000, 10000, 7000, 12000, 9000]
-})
-
-const trafficData = ref([
-  { label: 'Direct', value: 50.5, color: 'bg-blue-500' },
-  { label: 'Referral', value: 19, color: 'bg-purple-400' },
-  { label: 'Organic', value: 30.5, color: 'bg-gray-400' }
-])
-
-// Computed properties
-const filteredActivity = computed(() => {
-  if (activityFilter.value === 'all') return recentActivity.value
-  // Add filtering logic based on activityFilter value
-  return recentActivity.value
-})
-
-// Methods
-const toggleDarkMode = () => {
-  isDarkMode.value = !isDarkMode.value
-  localStorage.setItem('darkMode', isDarkMode.value.toString())
-}
-
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
-}
-
-const setActiveMenuItem = (itemName) => {
-  sidebarItems.value.forEach(item => {
-    item.active = item.name === itemName
-  })
-  // Close mobile menu when item is selected
-  if (isMobileMenuOpen.value) {
-    isMobileMenuOpen.value = false
-  }
-}
-
-const updateRevenue = () => {
-  const revenues = {
-    week: 4200,
-    month: 16400,
-    year: 196800
-  }
-  selectedRevenue.value = revenues[selectedPeriod.value]
-}
-
-const filterActivity = () => {
-  // Implement filtering logic
-  console.log('Filtering activity by:', activityFilter.value)
-}
-
-const viewReport = (title) => {
-  console.log('Viewing report for:', title)
-  // Implement report viewing logic
-}
-
-const viewCustomer = (customer) => {
-  console.log('Viewing customer:', customer.name)
-  // Implement customer viewing logic
-}
-
-const getStatusColor = (status) => {
-  const colors = {
-    'Member': 'bg-gray-100 text-gray-800',
-    'Signed Up': 'bg-orange-100 text-orange-800',
-    'New Customer': 'bg-green-100 text-green-800'
-  }
-  return colors[status] || 'bg-gray-100 text-gray-800'
-}
-
-// Lifecycle
-onMounted(() => {
-  // Load dark mode preference
-  const savedDarkMode = localStorage.getItem('darkMode')
-  if (savedDarkMode) {
-    isDarkMode.value = savedDarkMode === 'true'
-  }
-
-  // Handle window resize
-  const handleResize = () => {
-    if (window.innerWidth >= 1024) {
-      isMobileMenuOpen.value = false
+    // console.log(json)
+    if (json.status && Array.isArray(json.data)) {
+      items.value = json.data.map(item => ({
+        ...item,
+        isFavorite: false // optional default flag
+      }))
+    } else {
+      console.error('Expected array in data, got:', json)
     }
-  }
-
-  window.addEventListener('resize', handleResize)
-
-  // Cleanup
-  return () => {
-    window.removeEventListener('resize', handleResize)
+  } catch (err) {
+    console.error('Fetch error:', err)
   }
 })
+
+const toggleFavorite = (id) => {
+  const item = items.value.find(i => i.pro_id === id)
+  if (item) item.isFavorite = !item.isFavorite
+}
+// for modal
+
+const showModal = ref(false)
+
+const form = ref({
+  pro_id: '',
+  productName: '',
+  brand: '',
+  category: '',
+  price: '',
+  description: '',
+  stock: '',
+  length: '',
+  color: ''
+})
+const handleFileUpload = (event) => {
+  form.value.file = event.target.files[0];
+};
+// Open modal and set product ID
+function openModal(proId) {
+  form.value.pro_id = proId
+  showModal.value = true
+}
+
+// Update item
+async function updateItem() {
+  try {
+    const response = await fetch(`http://localhost/ApplicationBackend/api/middleware/updateApi.php?${form.value.pro_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form.value)
+    })
+    const result = await response.json()
+
+    if( result){
+      console.log(result)
+      Swal.fire({
+        icon: 'success',
+        title: 'Product Added',
+        text: 'The product has been successfully added!'
+      });
+    }else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.message
+      });
+    }
+    showModal.value = false
+  } catch (error) {
+    console.error('Update failed:', error)
+  }
+}
+
 </script>
 
+
+<style scoped>
+/* Additional custom styles if needed */
+.grid {
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+</style>

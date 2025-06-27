@@ -1,114 +1,355 @@
 <template>
-  <div class="bg-white min-h-screen p-1">
-    <div class="max-w-6xl mx-auto">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-        <router-link :to="{ path: 'detail', query: { category: item.category } }" v-for="item in items" :key="item.category"
-            class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-          <!-- Header -->
-          <div class="flex justify-between items-center p-4 pb-2">
-            <h3 class="text-gray-800 font-semibold text-sm truncate">
-              {{ item.productName }}
-            </h3>
-            <button @click="toggleFavorite(item.pro_id)" class="text-gray-400 hover:text-red-500 transition-colors">
-              <svg class="w-5 h-5" :class="item.isFavorite ? 'text-red-500 fill-current' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-              </svg>
-            </button>
+  <div class="container mx-auto p-4 max-w-7xl bg-gray-50 min-h-screen">
+    <!-- Header Section -->
+    <div class="bg-white rounded-lg shadow-sm mb-6 p-4">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <!-- Search Bar -->
+        <div class="relative flex-1 max-w-md">
+          <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input v-model="searchQuery" type="text" placeholder="Search..."
+                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none">
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-3">
+          <button class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+            </svg>
+            <span class="hidden sm:inline">Sort</span>
+          </button>
+          <button class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+            </svg>
+            <span class="hidden sm:inline">Filter</span>
+          </button>
+          <router-link to="Register" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            <span class="hidden sm:inline">Add Product</span>
+          </router-link>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+      <!-- Desktop Table -->
+      <div class="hidden lg:block overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 text-left">
+              <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PRODUCT</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CATEGORY</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Length</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STOCK</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PRICE</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ACTION</th>
+          </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+          <tr v-for="product in filteredProducts" :key="product.id" class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4">
+              <input type="checkbox" v-model="selectedProducts" :value="product.id" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ product.pro_id }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <img :src="`http://localhost/ApplicationBackend/api/${product.thumbnail}`" :alt="product.name" class="h-10 w-10 rounded-lg object-cover mr-3">
+                <div class="max-w-[200px]">
+                  <div class="text-sm font-medium text-gray-900 truncate overflow-hidden whitespace-nowrap">
+                    {{ product.productName }}
+                  </div>
+                </div>
+
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ product.category }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="w-2 h-2 rounded-full mr-1.5 text-red-500">{{ product.length }}</span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-500">{{ product.stock }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500 ">${{ product.price }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <div class="flex items-center space-x-2">
+                <button @click="deleteProduct(product.id)" class="text-red-600 hover:text-red-900 transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                </button>
+                <button @click="openModal(product.pro_id)" class="text-blue-600 hover:text-blue-900 transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Card View -->
+      <div class="lg:hidden">
+        <div v-for="product in filteredProducts" :key="product.id" class="border-b border-gray-200 p-4 align-middle">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center">
+              <input type="checkbox" v-model="selectedProducts" :value="product.id" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3">
+              <img :src="`http://localhost/ApplicationBackend/api/${product.thumbnail}`" :alt="product.productName" class="h-12 w-12 rounded-lg object-cover mr-3">
+              <div>
+                <div class="max-w-[90px]"> <!-- or w-40, w-48, etc. -->
+                  <div class="text-sm font-medium text-gray-900 truncate overflow-hidden whitespace-nowrap">
+                    {{ product.productName }}
+                    <p class="text-sm text-gray-500">{{ product.category }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button @click="deleteProduct(product.pro_id)" class="text-red-600 hover:text-red-900 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+              </button>
+              <button @click="openModal(product.pro_id)" class="text-blue-600 hover:text-blue-900 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4 text-sm">
+            <div>
+              <span class="text-gray-500 block">Length</span>
+              <span class="w-2 h-2 rounded-full mr-1.5">{{ product.length }}</span>
+            </div>
+            <div>
+              <span class="text-gray-500 block">Stock</span>
+              <span class="text-gray-900 font-medium">{{ product.stock }}</span>
+            </div>
+            <div>
+              <span class="text-gray-500 block">Price</span>
+              <span class="text-gray-900 font-medium">${{ product.price }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  modal for update product -->
+  <div class="p-6">
+    <!-- Modal -->
+    <div v-if="showModal" class="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50" @click.self="showModal = false">
+      <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative space-y-6">
+        <!-- Close Button -->
+        <button @click="showModal = false"
+                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold">
+          &times;
+        </button>
+
+        <!-- Modal Header -->
+        <h2 class="text-2xl font-semibold text-gray-800">Update Product</h2>
+
+        <!-- Alert Message -->
+        <h3 id="alert-message" class="text-green-500 font-semibold italic text-lg"></h3>
+
+        <!-- Form -->
+        <form @submit.prevent="updateItem()" class="space-y-6">
+          <!-- Basic Info -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-2">Basic Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Product Name *</label>
+                <input v-model="form.productName" type="text" required placeholder="Enter product name"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Brand</label>
+                <input v-model="form.brand" type="text" required placeholder="Enter brand name"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Category *</label>
+                <select v-model="form.category" required class="w-full border border-gray-300 rounded px-3 py-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-400">
+                  <option disabled value="">Select category</option>
+                  <option value="FishingClothing">FishingClothing</option>
+                  <option value="FishingChairs">FishingChairs</option>
+                  <option value="FishingWadersBoots">FishingWaders & Boots</option>
+                  <option value="FishingLine">FlyFishingLine</option>
+                  <option value="FishingReel">FishingReel</option>
+                  <option value="FishingLures">FishingLures</option>
+                  <option value="FishingBundles">FishingBundles</option>
+                  <option value="FishingTools">FishingTools</option>
+                  <option value="FishingPolesWhips">PolesWhips</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Price *</label>
+                <input v-model="form.price" type="number" step="0.01" min="0" required placeholder="0.00"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
+                <input v-model="form.pro_id" type="text" required value="${{product.pro_id}}"
+                       class=" w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+            </div>
+            <div class="mt-4">
+              <label class="block text-sm font-medium text-gray-600 mb-1">Description</label>
+              <textarea v-model="form.description" rows="4" placeholder="Detailed product description..."
+                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"></textarea>
+            </div>
           </div>
 
-          <!-- Image -->
-          <div class="px-4 pb-4">
-            <div class="bg-gray-100 rounded-lg h-80 flex items-center justify-center overflow-hidden">
-              <img :src="`http://localhost/ApplicationBackend/api/${item.thumbnail}`" :alt="item.productName" class="w-full h-full object-cover"/>
+          <!-- Stock and Length -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-2">Pricing & Inventory</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Stock *</label>
+                <input v-model="form.stock" type="number" min="0" required placeholder="0"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Length</label>
+                <input v-model="form.length" type="number" step="0.1" min="0" placeholder="0.0"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
             </div>
           </div>
 
-          <!-- Details -->
-          <div class="px-4 pb-4">
-            <div class="flex items-center justify-between mb-3 text-gray-500 text-xxl">
-              <div class="flex items-center space-x-1 max-w-[120px]">
-                 <span class="text-blue-500">📔</span>
-                <span class="text-base text-gray-500 truncate overflow-hidden whitespace-nowrap">{{ item.description }}</span>
+          <!-- Thumbnail & Color -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-2">Product Specs</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Thumbnail</label>
+                <input type="file" @change="handleFileUpload" class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none" />
               </div>
-              <div class="flex items-center space-x-1">
-                <span class="text-blue-500">⚙️</span>
-                <span class="text-base">{{ item.color }}</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between text-gray-600 text-xs">
-              <div class="mb-2">
-                <div class="flex items-center space-x-1">
-                  <span class="text-yellow-500 text-base">⭐</span>
-                  <span class="text-yellow-500 font-mono text-base">{{ item.length }}</span>
-                </div>
-                <div class="flex items-center space-x-1">
-                  <span class="text-green-500 text-base">👥</span>
-                  <span class="text-green-500 font-mono text-base">{{ item.stock }}</span>
-                </div>
-              </div>
-              <div class="text-red-500 font-mono text-lg ml-auto">
-                ${{ item.price }}
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Color</label>
+                <input v-model="form.color" type="text" placeholder="Black, Blue, Red"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
               </div>
             </div>
           </div>
-        </router-link>
+
+          <!-- Footer Buttons -->
+          <div class="flex justify-end space-x-3 pt-4">
+            <button type="button" @click="showModal = false"
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded">Cancel</button>
+            <button type="submit"
+                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded shadow">Submit</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from "vue"
-const items = ref([])
+<script>
+export default {
+  name: 'ProductTable',
+  data() {
+    return {
+      searchQuery: '',
+      selectAll: false,
+      selectedProducts: [],
+      products: [],
 
-onMounted(async () => {
-  try {
-    const res = await fetch('http://localhost/ApplicationBackend/api/middleware/api_fecth.php')
-    const json = await res.json()
+      // Modal control
+      showModal: false,
 
-    // console.log(json)
-    if (json.status && Array.isArray(json.data)) {
-      items.value = json.data.map(item => ({
-        ...item,
-        isFavorite: false // optional default flag
-      }))
-    } else {
-      console.error('Expected array in data, got:', json)
+      // Form data
+      form: {
+        pro_id: '',
+        productName: '',
+        brand: '',
+        category: '',
+        price: '',
+        description: '',
+        stock: '',
+        length: '',
+        color: ''
+      }
     }
-  } catch (err) {
-    console.error('Fetch error:', err)
-  }
-})
+  },
+  mounted() {
+    this.fetchProducts()
+  },
+  computed: {
+    filteredProducts() {
+      if (!this.searchQuery) return this.products
 
-const toggleFavorite = (id) => {
-  const item = items.value.find(i => i.pro_id === id)
-  if (item) item.isFavorite = !item.isFavorite
+      return this.products.filter(product =>
+          product.productName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          product.category.toLowerCase().includes(this.searchQuery.toLowerCase())||
+          product.price.toLowerCase().includes(this.searchQuery.toLowerCase())
+      )
+    }
+  },
+  watch: {
+    selectedProducts() {
+      this.selectAll = this.selectedProducts.length === this.filteredProducts.length && this.filteredProducts.length > 0
+    }
+  },
+  methods: {
+    async fetchProducts() {
+      try {
+        const res = await fetch('http://localhost/ApplicationBackend/api/middleware/api_fecth.php')
+        const json = await res.json()
+
+        if (json.status && Array.isArray(json.data)) {
+          this.products = json.data
+        } else {
+          console.error('Unexpected data structure:', json)
+        }
+      } catch (error) {
+        console.error('Fetch error:', error)
+      }
+    },
+    toggleSelectAll() {
+      if (this.selectAll) {
+        this.selectedProducts = this.filteredProducts.map(p => p.id)
+      } else {
+        this.selectedProducts = []
+      }
+    },
+    deleteProduct(id) {
+    },
+    openModal(proId) {
+      const product = this.products.find(p => p.pro_id === proId)
+      if (product) {
+        this.form = { ...product }
+        this.showModal = true
+      } else {
+        console.warn('Product not found with ID:', proId)
+      }
+    },
+    updateItem() {
+      // You would send this.form to the backend here
+      console.log('Form submitted:', this.form)
+      document.getElementById('alert-message').textContent = 'Product updated successfully!'
+      setTimeout(() => {
+        this.showModal = false
+      }, 1000)
+    },
+    handleFileUpload(event) {
+      const file = event.target.files[0]
+      if (file) {
+        this.form.thumbnail = file
+      }
+    }
+  }
 }
 </script>
 
-
-<style scoped>
-/* Additional custom styles if needed */
-.grid {
-  gap: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-</style>

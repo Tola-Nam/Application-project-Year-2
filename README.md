@@ -12,6 +12,7 @@ This template uses:
 - 🎨 **Tailwind CSS** – utility-first CSS framework
 - 🔄 **Vue Router** – official router for Vue apps
 - 📦 **Pinia** – next-gen state management library for Vue
+- 📔 **Sweetalert** - in project using sweet alert
 
 It's perfect for developers who want a clean, fast, and modern setup with best practices out of the box.
 
@@ -35,7 +36,7 @@ Before starting, make sure you have:
 git clone https://github.com/your-username/your-vue-app.git
 cd your-vue-app
 ```
-2. **How to install**
+**How to install**
 
 `` npm install
 ``
@@ -46,4 +47,8 @@ npx tailwindcss init -p
 
 ``npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
+``
+``
+npm install sweetalert2
+yarn add sweetalert2
 ``

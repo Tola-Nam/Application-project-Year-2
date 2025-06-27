@@ -39,7 +39,7 @@
             <div class="form-group">
               <label for="price">Price *</label>
                 <span class="prefix">$</span>
-                <input id="price" v-model="form.price" type="number" step="0.01" min="0" required class="form-input" placeholder="0.00"/>
+                <input id="price" v-model="form.price" type="number" step="0.1" min="0" max="10000000" required class="form-input" placeholder="0.0"/>
             </div>
           </div>
 
@@ -55,7 +55,7 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label for="quantity">Stock Quantity *</label>
+              <label for="quantity">Stock *</label>
               <input id="quantity" v-model="form.quantity" type="number" min="0" required class="form-input" placeholder="0"/>
             </div>
 
@@ -79,7 +79,6 @@
             </div>
           </div>
         </div>
-
         <!-- Form Actions -->
         <div class="form-actions">
           <button type="submit" class="btn btn-primary">
@@ -93,6 +92,8 @@
 
 <script setup>
 import { ref } from 'vue';
+import Swal from 'sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css'
 
 const form = ref({
   productName: '',
@@ -138,10 +139,20 @@ const submitForm = async () => {
 
   if ( message === "success"){
     // alert(message);
+    Swal.fire({
+      icon: 'success',
+      title: 'Product Added',
+      text: 'The product has been successfully added!'
+    });
     setTimeout(()=>{
       document.getElementById('alert-message').innerHTML = `product create ${message}`;
     },3000)
   }else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error.message
+    });
     setTimeout(()=>{
       document.getElementById('alert-message').innerHTML = `product create is not ${message}`;
     },3000)
