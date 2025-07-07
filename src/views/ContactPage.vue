@@ -33,8 +33,7 @@
           </div>
           <div>
             <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-            <input type="text" id="lastName"
-                   v-model="registerForm.lastName" autocomplete="family-name" required
+            <input type="text" id="lastName" v-model="registerForm.lastName" autocomplete="family-name" required
                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors">
           </div>
         </div>
@@ -70,28 +69,16 @@
         <div>
           <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
           <div class="relative">
-            <input
-                :type="showConfirm ? 'text' : 'password'"
-                id="confirmPassword"
-                v-model="registerForm.confirmPassword"
-                autocomplete="new-password"
-                required
-                pattern="[A-Za-z0-9]{6,}"
-                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
-                placeholder="Repeat your password"
-            >
-            <i
-                :class="showConfirm ? 'bi-eye' : 'bi-eye-slash'"
-                @click="toggleConfirm"
-                class="bi absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
-            ></i>
+            <input :type="showConfirm ? 'text' : 'password'" id="confirmPassword" v-model="registerForm.confirmPassword"
+                autocomplete="new-password" required pattern="[A-Za-z0-9]{6,}"
+                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors" placeholder="Repeat your password">
+            <i :class="showConfirm ? 'bi-eye' : 'bi-eye-slash'" @click="toggleConfirm"
+                class="bi absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"></i>
           </div>
         </div>
 
-        <button
-            type="submit"
-            class="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors"
-        >
+        <button type="submit"
+            class="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors">
           Register
         </button>
       </form>
@@ -99,38 +86,22 @@
       <!-- Login Form -->
       <form v-else @submit.prevent="handleLogin" class="space-y-6">
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
-
         <div>
           <label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-          <input
-              type="email"
-              id="loginEmail"
-              v-model="loginForm.email"
-              autocomplete="email"
-              required
+          <input type="email" id="loginEmail" v-model="loginForm.email" autocomplete="email" required
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
-              placeholder="Input your email"
-          >
+              placeholder="Input your email">
         </div>
-
         <div>
           <label for="loginPhone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-          <input
-              type="tel"
-              id="loginPhone"
-              v-model="loginForm.phone"
-              autocomplete="tel"
-              required
+          <input type="tel" id="loginPhone" v-model="loginForm.phone" autocomplete="tel" required
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
-              placeholder="Input your phone number"
-          >
+              placeholder="Input your phone number">
         </div>
-
         <div>
           <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
           <div class="relative">
-            <input :type="showPassword ? 'text' : 'password'" id="loginPassword" v-model="loginForm.password"
-                   autocomplete="current-password" required pattern="[A-Za-z0-9]{8,}"
+            <input :type="showPassword ? 'text' : 'password'" id="loginPassword" v-model="loginForm.password" autocomplete="current-password" required pattern="[A-Za-z0-9]{8,}"
                    class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
                    placeholder="Enter your password">
             <i :class="showPassword ? 'bi-eye' : 'bi-eye-slash'" @click="togglePassword"

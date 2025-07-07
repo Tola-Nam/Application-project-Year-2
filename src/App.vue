@@ -1,13 +1,15 @@
 <template>
-  <HelloWorld/>
+<!--  <Register/>-->
+    <sidebar/>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
+import AdminSidebar from "./components/AdminSidebar.vue";
+import Register  from "./views/Register.vue";
 export default {
   components: {
-    HelloWorld,
+    sidebar: AdminSidebar,
+    Register: Register,
   }
 };
 </script>

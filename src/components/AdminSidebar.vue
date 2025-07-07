@@ -24,20 +24,37 @@
       </div>
 
       <!-- Store Selection -->
-      <div :class="['p-4 border-b',isDarkMode ? 'border-gray-700' : 'border-gray-200']">
-        <select :class="['w-full p-2 rounded-lg border transition-colors',isDarkMode
-            ? 'bg-gray-700 text-white border-gray-600': 'bg-white text-gray-900 border-gray-300']">
-          <option>Please check category</option>
-          <option>Fishing Clothing</option>
-          <option>Fishing Chairs</option>
-          <option>Fishing Waders & Boots</option>
-          <option>Fly Fishing Line</option>
-          <option>Fishing Reel</option>
-          <option>Fishing Lures</option>
-          <option>FishingBundles</option>
-          <option>Fishing Tools</option>
-          <option>Fishing Poles Whips</option>
-        </select>
+<!--      <div :class="['p-4 border-b',isDarkMode ? 'border-gray-700' : 'border-gray-200']">-->
+<!--        <select :class="['w-full p-2 rounded-lg border transition-colors',isDarkMode-->
+<!--            ? 'bg-gray-700 text-white border-gray-600': 'bg-white text-gray-900 border-gray-300']">-->
+<!--          <option>Please check category</option>-->
+<!--          <option>Fishing Clothing</option>-->
+<!--          <option>Fishing Chairs</option>-->
+<!--          <option>Fishing Waders & Boots</option>-->
+<!--          <option>Fly Fishing Line</option>-->
+<!--          <option>Fishing Reel</option>-->
+<!--          <option>Fishing Lures</option>-->
+<!--          <option>FishingBundles</option>-->
+<!--          <option>Fishing Tools</option>-->
+<!--          <option>Fishing Poles Whips</option>-->
+<!--        </select>-->
+<!--      </div>-->
+
+      <div :class="['relative p-4 border-b', isDarkMode ? 'border-gray-700' : 'border-gray-200']">
+        <!-- Dropdown Trigger -->
+        <div @click="toggleCategoryDropdown" class="cursor-pointer w-full p-2 rounded-lg border transition-colors"
+            :class="isDarkMode? 'bg-gray-700 text-white border-gray-600': 'bg-white text-gray-900 border-gray-300'">
+          {{ selectedCategory || 'Please check category' }}
+        </div>
+        <!-- Dropdown List -->
+        <ul v-if="isOpen" class="absolute mt-1 w-full max-h-60 overflow-y-auto z-10 rounded-lg shadow-lg"
+            :class="isDarkMode? 'bg-gray-700 text-white border border-gray-600': 'bg-white text-gray-900 border border-gray-300'">
+          <li v-for="(category, index) in categories" :key="index" @click="selectCategory(category)"
+              class="p-2 hover:bg-blue-500 hover:text-white cursor-pointer">
+<!--            <router-link to="/Electronics"></router-link>-->
+            {{ category }}
+          </li>
+        </ul>
       </div>
 
       <!-- Navigation -->
@@ -47,8 +64,7 @@
               class="block">
             <div @click="setActiveMenuItem(item.name)" :class="['flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200',item.active
               ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg': isDarkMode
-              ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' ]">
+              ? 'text-gray-300 hover:bg-gray-700 hover:text-white': 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' ]">
               <div class="flex items-center space-x-3">
                 <span class="text-lg">{{ item.icon }}</span>
                 <span class="font-medium">{{ item.name }}</span>
@@ -101,6 +117,24 @@
 
           <div class="flex items-center space-x-2 md:space-x-4">
             <div class="flex items-center space-x-2 md:space-x-3">
+              <!--chance language -->
+              <div class="bg-grey-400">
+                <details class="relative inline-block">
+                  <summary class="cursor-pointer inline-flex items-center justify-between px-4 py-2 bg-white rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Language
+                    <svg class="ml-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7l3-3 3 3m0 6l-3 3-3-3" />
+                    </svg>
+                  </summary>
+                  <div class="absolute z-10 mt-2 w-40 rounded-md bg-grey-400 ring-0 ring-black ring-opacity-5">
+                    <ul class="py-1 text-sm text-gray-700">
+                      <li><a href="?lang=en" class="block px-4 py-2 hover:bg-gray-100">English</a></li>
+                      <li><a href="?lang=kh" class="block px-4 py-2 hover:bg-gray-100">ភាសាខ្មែរ</a></li>
+                    </ul>
+                  </div>
+                </details>
+              </div>
+
               <div class="relative" @click="toggleDropdown">
                 <!-- User Info -->
                 <div class="flex items-center space-x-2 cursor-pointer">
@@ -231,11 +265,33 @@ onMounted(() => {
     window.removeEventListener('resize', handleResize)
   }
 })
+// make drop down
+const showDropdown = ref(false)
+const toggleCategoryDropdown = () => {
+  isOpen.value = !isOpen.value
+}
+const isOpen = ref(false)
+const selectedCategory = ref(null)
 
-const showDropdown = ref(false)// you can bind this to your actual dark mode logic
+const categories = [
+  'Fishing Clothing',
+  'Fishing Chairs',
+  'Fishing Waders & Boots',
+  'Fly Fishing Line',
+  'Fishing Reel',
+  'Fishing Lures',
+  'FishingBundles',
+  'Fishing Tools',
+  'Fishing Poles Whips'
+]
 
-function toggleDropdown() {
-  showDropdown.value = !showDropdown.value
+const toggleDropdown = () => {
+  isOpen.value = !isOpen.value
+}
+
+const selectCategory = (category) => {
+  selectedCategory.value = category
+  isOpen.value = false
 }
 
 </script>

@@ -8,9 +8,7 @@
           <router-link :to="{ path: 'detail', query: { category: item.category } }" class="block">
             <!-- Header -->
             <div class="flex justify-between items-center p-4 pb-2">
-              <h3 class="text-gray-800 font-semibold text-sm truncate">
-                {{ item.productName }}
-              </h3>
+              <h3 class="text-gray-800 font-semibold text-sm truncate">{{ item.productName }}</h3>
             </div>
 
             <!-- Image -->

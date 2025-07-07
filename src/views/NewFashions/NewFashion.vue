@@ -35,7 +35,6 @@
         </div>
       </div>
     </div>
-
     <!-- Table Section -->
     <div class="bg-white rounded-lg shadow-sm overflow-hidden">
       <!-- Desktop Table -->
@@ -69,18 +68,17 @@
                     {{ product.productName }}
                   </div>
                 </div>
-
               </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ product.category }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="w-2 h-2 rounded-full mr-1.5 text-red-500">{{ product.length }}</span>
+              <span class="text-red-500">{{ product.length }}</span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-500">{{ product.stock }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500 ">${{ product.price }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500">${{ product.price }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
               <div class="flex items-center space-x-2">
-                <button @click="deleteProduct(product.id)" class="text-red-600 hover:text-red-900 transition-colors">
+                <button @click="deleteProduct(product.pro_id)" class="text-red-600 hover:text-red-900 transition-colors">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                   </svg>
@@ -96,7 +94,6 @@
           </tbody>
         </table>
       </div>
-
       <!-- Mobile Card View -->
       <div class="lg:hidden">
         <div v-for="product in filteredProducts" :key="product.id" class="border-b border-gray-200 p-4 align-middle">
@@ -105,7 +102,7 @@
               <input type="checkbox" v-model="selectedProducts" :value="product.id" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3">
               <img :src="`http://localhost/ApplicationBackend/api/${product.thumbnail}`" :alt="product.productName" class="h-12 w-12 rounded-lg object-cover mr-3">
               <div>
-                <div class="max-w-[90px]"> <!-- or w-40, w-48, etc. -->
+                <div class="max-w-[90px]">
                   <div class="text-sm font-medium text-gray-900 truncate overflow-hidden whitespace-nowrap">
                     {{ product.productName }}
                     <p class="text-sm text-gray-500">{{ product.category }}</p>
@@ -129,7 +126,7 @@
           <div class="grid grid-cols-3 gap-4 text-sm">
             <div>
               <span class="text-gray-500 block">Length</span>
-              <span class="w-2 h-2 rounded-full mr-1.5">{{ product.length }}</span>
+              <span>{{ product.length }}</span>
             </div>
             <div>
               <span class="text-gray-500 block">Stock</span>
@@ -145,9 +142,8 @@
     </div>
   </div>
 
-  <!--  modal for update product -->
+  <!-- Modal for update product -->
   <div class="p-6">
-    <!-- Modal -->
     <div v-if="showModal" class="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50" @click.self="showModal = false">
       <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative space-y-6">
         <!-- Close Button -->
@@ -155,12 +151,12 @@
                 class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold">
           &times;
         </button>
-
         <!-- Modal Header -->
         <h2 class="text-2xl font-semibold text-gray-800">Update Product</h2>
-
         <!-- Alert Message -->
-        <h3 id="alert-message" class="text-green-500 font-semibold italic text-lg"></h3>
+        <div v-if="alertMessage" :class="alertClass" class="p-3 rounded-md">
+          {{ alertMessage }}
+        </div>
 
         <!-- Form -->
         <form @submit.prevent="updateItem()" class="space-y-6">
@@ -169,9 +165,29 @@
             <h3 class="text-lg font-medium text-gray-700 mb-2">Basic Information</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Product ID *</label>
+                <input v-model="form.pro_id" type="text" required placeholder="Enter product name"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
                 <label class="block text-sm font-medium text-gray-600 mb-1">Product Name *</label>
                 <input v-model="form.productName" type="text" required placeholder="Enter product name"
                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Category *</label>
+                <select v-model="form.category" required class="w-full border border-gray-300 rounded px-3 py-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-400">
+                  <option disabled value="">Select category</option>
+                  <option value="FishingClothing">Fishing Clothing</option>
+                  <option value="FishingChairs">Fishing Chairs</option>
+                  <option value="FishingWadersBoots">Fishing Waders & Boots</option>
+                  <option value="FishingLine">Fly Fishing Line</option>
+                  <option value="FishingReel">Fishing Reel</option>
+                  <option value="FishingLures">Fishing Lures</option>
+                  <option value="FishingBundles">Fishing Bundles</option>
+                  <option value="FishingTools">Fishing Tools</option>
+                  <option value="FishingPolesWhips">Poles & Whips</option>
+                </select>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-600 mb-1">Brand</label>
@@ -179,76 +195,48 @@
                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-600 mb-1">Category *</label>
-                <select v-model="form.category" required class="w-full border border-gray-300 rounded px-3 py-2 text-gray-700 focus:outline-none focus:ring focus:border-blue-400">
-                  <option disabled value="">Select category</option>
-                  <option value="FishingClothing">FishingClothing</option>
-                  <option value="FishingChairs">FishingChairs</option>
-                  <option value="FishingWadersBoots">FishingWaders & Boots</option>
-                  <option value="FishingLine">FlyFishingLine</option>
-                  <option value="FishingReel">FishingReel</option>
-                  <option value="FishingLures">FishingLures</option>
-                  <option value="FishingBundles">FishingBundles</option>
-                  <option value="FishingTools">FishingTools</option>
-                  <option value="FishingPolesWhips">PolesWhips</option>
-                </select>
-              </div>
-              <div>
                 <label class="block text-sm font-medium text-gray-600 mb-1">Price *</label>
                 <input v-model="form.price" type="number" step="0.01" min="0" required placeholder="0.00"
                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
               </div>
               <div>
-                <input v-model="form.pro_id" type="text" required value="${{product.pro_id}}"
-                       class=" w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+                <label class="block text-sm font-medium text-gray-600 mb-1">Stock *</label>
+                <input v-model="form.stock" type="number" min="0" required placeholder="0"
+                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
               </div>
             </div>
             <div class="mt-4">
               <label class="block text-sm font-medium text-gray-600 mb-1">Description</label>
               <textarea v-model="form.description" rows="4" placeholder="Detailed product description..."
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"></textarea>
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Thumbnail</label>
+              <input type="file" @change="handleFileUpload" class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none" />
             </div>
           </div>
-
-          <!-- Stock and Length -->
           <div>
-            <h3 class="text-lg font-medium text-gray-700 mb-2">Pricing & Inventory</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-600 mb-1">Stock *</label>
-                <input v-model="form.stock" type="number" min="0" required placeholder="0"
-                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+                <label class="block text-sm font-medium text-gray-600 mb-1">Color</label>
+                <input v-model="form.color" type="text" placeholder="Black, Blue, Red"
+                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-600 mb-1">Length</label>
                 <input v-model="form.length" type="number" step="0.1" min="0" placeholder="0.0"
-                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
               </div>
             </div>
           </div>
-
-          <!-- Thumbnail & Color -->
-          <div>
-            <h3 class="text-lg font-medium text-gray-700 mb-2">Product Specs</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-600 mb-1">Thumbnail</label>
-                <input type="file" @change="handleFileUpload" class="w-full border border-gray-300 rounded px-3 py-2 bg-white focus:outline-none" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-600 mb-1">Color</label>
-                <input v-model="form.color" type="text" placeholder="Black, Blue, Red"
-                       class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
-              </div>
-            </div>
-          </div>
-
           <!-- Footer Buttons -->
           <div class="flex justify-end space-x-3 pt-4">
             <button type="button" @click="showModal = false"
-                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded">Cancel</button>
-            <button type="submit"
-                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded shadow">Submit</button>
+               class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded">Cancel</button>
+            <button type="submit" :disabled="isUpdating"
+               class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded shadow disabled:opacity-50">
+              {{ isUpdating ? 'Updating...' : 'Submit' }}
+            </button>
           </div>
         </form>
       </div>
@@ -257,6 +245,9 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css'
+
 export default {
   name: 'ProductTable',
   data() {
@@ -268,6 +259,11 @@ export default {
 
       // Modal control
       showModal: false,
+      isUpdating: false,
+
+      // Alert system
+      alertMessage: '',
+      alertClass: '',
 
       // Form data
       form: {
@@ -279,7 +275,8 @@ export default {
         description: '',
         stock: '',
         length: '',
-        color: ''
+        color: '',
+        thumbnail: null
       }
     }
   },
@@ -292,8 +289,8 @@ export default {
 
       return this.products.filter(product =>
           product.productName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          product.category.toLowerCase().includes(this.searchQuery.toLowerCase())||
-          product.price.toLowerCase().includes(this.searchQuery.toLowerCase())
+          product.category.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          product.price.toString().includes(this.searchQuery.toLowerCase())
       )
     }
   },
@@ -312,11 +309,14 @@ export default {
           this.products = json.data
         } else {
           console.error('Unexpected data structure:', json)
+          this.showAlert('Failed to load products', 'error')
         }
       } catch (error) {
         console.error('Fetch error:', error)
+        this.showAlert('Error loading products', 'error')
       }
     },
+
     toggleSelectAll() {
       if (this.selectAll) {
         this.selectedProducts = this.filteredProducts.map(p => p.id)
@@ -324,32 +324,107 @@ export default {
         this.selectedProducts = []
       }
     },
-    deleteProduct(id) {
+    async deleteProduct(pro_id) {
+      // alert(pro_id);
+      if (confirm(`Are you sure you want to delete this product?`)) {
+        try {
+          const response = await fetch(`http://localhost/ApplicationBackend/api/middleware/deleted_api.php?pro_id=${pro_id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+
+          const result = await response.json();
+
+          if (result.status) {
+            this.showAlert('Product deleted successfully', 'success');
+            Swal.fire('Deleted!', 'Product deleted successfully.', 'success');
+            this.fetchProducts(); // Reload product list
+          } else {
+            Swal.fire('Failed!', 'Failed to delete product.', 'error');
+            this.showAlert(result.message || 'Failed to delete product', 'error');
+          }
+        } catch (error) {
+          console.error('Delete error:', error);
+          this.showAlert('Error deleting product', 'error');
+        }
+      }
     },
     openModal(proId) {
+      // alert(proId);
       const product = this.products.find(p => p.pro_id === proId)
       if (product) {
-        this.form = { ...product }
+        this.form = {
+          ...product,
+          thumbnail: null // Reset file input
+        }
         this.showModal = true
+        this.alertMessage = ''
       } else {
         console.warn('Product not found with ID:', proId)
       }
     },
-    updateItem() {
-      // You would send this.form to the backend here
-      console.log('Form submitted:', this.form)
-      document.getElementById('alert-message').textContent = 'Product updated successfully!'
-      setTimeout(() => {
-        this.showModal = false
-      }, 1000)
-    },
+
     handleFileUpload(event) {
-      const file = event.target.files[0]
-      if (file) {
-        this.form.thumbnail = file
+      this.form.thumbnail = event.target.files[0]
+    },
+
+    async updateItem() {
+      this.isUpdating = true
+
+      const formData = new FormData()
+      formData.append('pro_id', this.form.pro_id)
+      formData.append('productName', this.form.productName)
+      formData.append('brand', this.form.brand)
+      formData.append('category', this.form.category)
+      formData.append('price', this.form.price)
+      formData.append('description', this.form.description)
+      formData.append('stock', this.form.stock)
+      formData.append('length', this.form.length)
+      formData.append('color', this.form.color)
+
+      if (this.form.thumbnail) {
+        formData.append('thumbnail', this.form.thumbnail)
       }
+
+      try {
+        const response = await fetch('http://localhost/ApplicationBackend/api/middleware/updateApi.php', {
+          method: 'POST',
+          body: formData,
+        })
+
+        const result = await response.json()
+
+        if (result.status) {
+          this.showAlert('Product updated successfully!', 'success')
+          this.fetchProducts() // Refresh the product list
+          setTimeout(() => {
+            this.showModal = false
+            this.alertMessage = ''
+          }, 1500)
+        } else {
+          this.showAlert(result.message || 'Update failed', 'error')
+        }
+      } catch (error) {
+        console.error('Update failed:', error)
+        this.showAlert('Update failed due to network error', 'error')
+      } finally {
+        this.isUpdating = false
+      }
+    },
+
+    showAlert(message, type) {
+      this.alertMessage = message
+      this.alertClass = type === 'success'
+          ? 'text-green-700 bg-green-100 border border-green-300'
+          : 'text-red-700 bg-red-100 border border-red-300'
+
+      // Auto-hide after 3 seconds
+      setTimeout(() => {
+        this.alertMessage = ''
+      }, 3000)
     }
   }
 }
 </script>
-
