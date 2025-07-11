@@ -38,7 +38,7 @@
             </div>
             <div class="form-group">
               <label for="price">Price *</label>
-                <span class="prefix">$</span>
+                <!-- <span class="prefix">$</span> -->
                 <input id="price" v-model="form.price" type="number" step="0.1" min="0" max="10000000" required class="form-input" placeholder="0.0"/>
             </div>
           </div>
@@ -165,7 +165,7 @@ const submitForm = async () => {
 .product-form {
   max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 4px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f5f6fa;
   min-height: 100vh;
@@ -173,7 +173,7 @@ const submitForm = async () => {
 
 .form-container {
   background: white;
-  border-radius: 12px;
+  border-radius: 5px;
   padding: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
